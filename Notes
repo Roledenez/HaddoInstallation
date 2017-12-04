@@ -99,7 +99,10 @@ sudo vim /opt/hadoop/etc/hadoop/hdfs-site.xml
 </property>
 
 
-hdfs namenode -format
+hdfs namenode -format #create the namenode for given directory
+
+to start try below
+start-dfs.sh
 
 
 
