@@ -78,3 +78,10 @@ sudo vim /opt/hadoop/etc/hadoop/mapred-site.xml
  <value>yarn</value>
 </property>
 
+editing HDFS-site.xml
+before that create the following folders
+sudo mkdir -p /opt/hadoop_store/hdfs/namenode
+sudo mkdir -p /opt/hadoop_store/hdfs/datanode
+
+sudo vim /opt/hadoop/etc/hadoop/hdfs-site.xml
+
