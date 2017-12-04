@@ -64,7 +64,7 @@ vim /opt/hadoop/etc/hadoop/core-site.xml
  <value>mapreduce_shuffle</value>
 </property>
 </property>
- <name>yarn.nodemanager.aux-services.mapredce.shuffle.clss</name>
+ <name>yarn.nodemanager.auxservices.mapredce.shuffle.clss</name>
  <value>org.apache.hadoop.mapred.ShuffleHandler</value>
 </property>
 
