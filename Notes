@@ -40,4 +40,21 @@ export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_INSTALL/lib/native
 export HADOOP_OPTS="-Djava.library.path=$HADOOP_INSTALL/lib"
 #Hadoop Variables End
 
+in order to permenent the barshrc
+source ~/.bashrc
+
+open the hadoop-env.sh
+vim /opt/hadoop/etc/hadoop/hadoop-env.sh
+add java_home path
+
+vim /opt/hadoop/etc/hadoop/core-site.xml
+
+<configuration>
+<property>
+ <name>fs.default.name</name>
+ <value>hdfs://localhost:9000</value>
+</property>
+</configuration>
+
+
 
