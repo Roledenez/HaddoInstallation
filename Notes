@@ -69,4 +69,12 @@ vim /opt/hadoop/etc/hadoop/core-site.xml
 </property>
 
 
+create and edit
+mapred-site.xml
+sudo cp /opt/hadoop/etc/hadoop/mapred-site.xml.template /opt/hadoop/etc/hadoop/mapred-site.xml
+sudo vim /opt/hadoop/etc/hadoop/mapred-site.xml
+<property>
+ <name>mapreduce.framework.name</name>
+ <value>yarn</value>
+</property>
 
