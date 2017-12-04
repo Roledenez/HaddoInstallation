@@ -85,3 +85,16 @@ sudo mkdir -p /opt/hadoop_store/hdfs/datanode
 
 sudo vim /opt/hadoop/etc/hadoop/hdfs-site.xml
 
+<property>
+ <name>dfs.replication</name>
+ <value>1</value>
+</property>
+<property>
+ <name>dfs.namenode.name.dir</name>
+ <value>file:/opt/hadoop_sotre/hdfs/namenode</value>
+</property>
+<property>
+ <name>dfs.datanode.data.dir</name>
+ <value>file:/opt/hadoop_store/hdfs/datanode</value>
+</property>
+
