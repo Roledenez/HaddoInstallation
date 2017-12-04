@@ -11,4 +11,33 @@ rpm -ivh jdk-8u151-linux-x64.rpm
 java -version
 
 
+generating SSH key
+ssh-keygen -t rsa -P ''
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+
+download and install hadoop
+ wget http://www-eu.apache.org/dist/hadoop/common/hadoop-2.9.0/hadoop-2.9.0.tar.gz
+ tar xfz hadoop-2.9.0.tar.gz
+mv hadoop-2.9.0 /opt/
+ln -s hadoop-2.9.0 hadoop
+
+update-alternatives --config java
+/usr/java/jdk1.8.0_151/jre/bin/java
+
+edit the ~/.bashrc file
+
+#Hadoop Variables Start
+export JAVA_HOME=/usr/java/jdk1.8.0_151
+export HADOOP_INSTALL=/opt/hadoop
+export PATH=$PATH:$HADOOP_INSTALL/bin
+export PATH=$PATH:$HADOOP_INSTALL/sbin
+export HADOOP_MAPRED_HOME=$HADOOOP_INSTALL
+export HADOOP_COMMON_HOME=$HADOOP_INSTALL
+export HADOOP_HDFS_HOME=$HADOOP_INSTALL
+export YARN_HOME=$HADOOP_INSTALL
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_INSTALL/lib/native
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_INSTALL/lib"
+#Hadoop Variables End
+
 
