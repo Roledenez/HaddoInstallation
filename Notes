@@ -1,0 +1,6 @@
+How to remove OpenJDK and install Oracle JDK
+java -version
+yum list java*
+yum -y remove java*
+java -version
+
