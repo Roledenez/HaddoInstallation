@@ -103,6 +103,7 @@ hdfs namenode -format #create the namenode for given directory
 
 to start try below
 start-dfs.sh
+start-yarn.sh
 
 
 
