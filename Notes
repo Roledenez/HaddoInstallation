@@ -106,4 +106,18 @@ start-dfs.sh
 start-yarn.sh
 
 
+user jps to check all the running services
+
+in case of localost:50070 is not working do the following
+iptables -A INPUT -p tcp --dport 50070 -j ACCEPT #optional
+
+stop-all.sh
+hadoop namenode -format
+start-all.sh
+
+
+
+
+
+
 
