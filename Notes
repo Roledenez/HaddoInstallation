@@ -98,3 +98,8 @@ sudo vim /opt/hadoop/etc/hadoop/hdfs-site.xml
  <value>file:/opt/hadoop_store/hdfs/datanode</value>
 </property>
 
+
+hdfs namenode -format
+
+
+
