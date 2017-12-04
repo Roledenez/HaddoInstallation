@@ -3,4 +3,4 @@ java -version
 yum list java*
 yum -y remove java*
 java -version
-
+wget --no-check-certificate --no-cookies --header "Cookie: or aclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u151-b12/jdk-8u151-linux-x64.rpm
