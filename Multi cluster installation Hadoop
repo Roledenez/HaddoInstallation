@@ -1,0 +1,193 @@
+
+http://fibrevillage.com/storage/617-hadoop-2-7-cluster-installation-and-configuration-on-rhel7-centos7
+
+
+Hadoop 2.7 cluster installation and configuration on RHEL7/CentOS7
+
+The Apache Hadoop is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models.
+
+In the other article Hadoop single node installation and configuration. This article will show you step by step installing and configuring Hadoop Multi-Node Cluster on CentOS/RHEL7
+
+Setup cluster information:
+
+Hadoop namenode: 192.168.1.1  ( hadoop-namenode )
+Hadoop datanode :  192.168.1.2  ( hadoop-datanode-1 )
+Hadoop datanode :  192.168.1.3  ( hadoop-datanode-2 )
+
+Step 1. Install Java
+
+Skip this step if your servers already have java installed, but make sure java version is compatible
+
+# java -version 
+
+java version "1.8.0_101"
+Java(TM) SE Runtime Environment (build 1.8.0_101-b13)
+Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode)
+Step 2. Create User Account
+
+Create a system user account on both master and slave systems to use for hadoop installation
+
+# useradd hadoop
+# passwd hadoop
+Changing password for user hadoop.
+New password:
+Retype new password:
+passwd: all authentication tokens updated successfully.
+Step 3: Add FQDN Mapping
+
+Skip this step if your working environment has centralized hostname mapping.
+
+Edit /etc/hosts file on all master and slave servers and add following entries.
+
+# vim /etc/hosts
+192.168.1.1 hadoop-namenode
+192.168.1.2 hadoop-datanode-1
+192.168.1.3 hadoop-datanode-2
+Step 4. Configuring SSH key pair login
+
+Hadoop framework itself doesn't need ssh, the administration tools like start.dfs.sh and stop.dfs.sh etc.. need it to start/stop various daemons. Thus, ssh must be installed and sshd must be running to use the Hadoop scripts that manage remote Hadoop daemons.
+
+Use following commands to configure auto login between all hadoop cluster servers..
+
+# su - hadoop
+$ ssh-keygen -t rsa
+$ ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@hadoop-namenode
+$ ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@hadoop-datanode-1
+$ ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@hadoop-datanode-2
+$ chmod 0600 ~/.ssh/authorized_keys
+$ exit
+Step 5. Download and Extract Hadoop Source
+
+Download hadoop latest available version from its official site at hadoop-namenode server only.
+
+Now download hadoop 2.7.3 binary file using below command. You can also select alternate download mirror. Source code package is also available, download and recompile it to fit your environment.
+
+# mkdir -p /opt/hadoop
+# chown hadoop:hadoop /opt/hadoop
+# su - hadoop
+$ cd /opt/hadoop
+$ wget http://www-us.apache.org/dist/hadoop/common/hadoop-2.7.3/hadoop-2.7.3.tar.gz
+$ tar xzf hadoop-2.7.3.tar.gz
+Step 6. Setup Environment Variables
+
+First we need to set environment variable uses by hadoop. Edit ~/.bashrc file and append following values at end of file.
+
+export HADOOP_HOME=/opt/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+Now apply the changes in current running environment
+
+$ source ~/.bashrc
+Now edit $HADOOP_HOME/etc/hadoop/hadoop-env.sh file and set JAVA_HOME environment variable. Change the JAVA path as per install on your system.
+
+export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-oracle.x86_64/
+export HADOOP_OPTS=-Djava.net.preferIPv4Stack=true
+Step 7: Configure Hadoop
+
+Hadoop has many of configuration files, which need to configure as per requirements of your hadoop infrastructure. Lets start with the configuration with basic hadoop single node cluster setup. first navigate to below location
+
+$ cd $HADOOP_HOME/etc/hadoop
+Edit core-site.xml
+
+# vi core-site.xml
+#Add the following inside the configuration tag
+<property>
+    <name>fs.default.name</name>
+    <value>hdfs://hadoop-namenode:9000/</value>
+</property>
+<property>
+    <name>dfs.permissions</name>
+    <value>false</value>
+</property>
+Edit hdfs-site.xml
+
+# vi hdfs-site.xml
+# Add the following inside the configuration tag
+<property>
+	<name>dfs.data.dir</name>
+	<value>/opt/hadoop/dfs/name/data</value>
+	<final>true</final>
+</property>
+<property>
+	<name>dfs.name.dir</name>
+	<value>/opt/hadoop/dfs/name</value>
+	<final>true</final>
+</property>
+<property>
+	<name>dfs.replication</name>
+	<value>1</value>
+</property>
+You can config multiple entries for dfs.name.dir and dfs.data.dir, see How to config multiple dfs.data.dir
+
+Edit mapred-site.xml
+
+# vi mapred-site.xml
+# Add the following inside the configuration tag
+<property>
+        <name>mapred.job.tracker</name>
+	<value>hadoop-namenode:9001</value>
+</property>
+Step 8: Copy Hadoop folder to Slave Servers
+
+After updating above configuration, we need to copy the source files to all slaves servers.
+
+# su - hadoop
+$ rsync -auvx $HADOOP_HOME hadoop-datanode-1:$HADOOP_HOME
+$ rsync -auvx $HADOOP_HOME hadoop-datanode-2:$HADOOP_HOME
+Step 9: Configure Hadoop on namenode Server Only
+
+Go to hadoop folder on hadoop-namenode and do following settings.
+
+# su - hadoop
+$ cd $HADOOP_HOME/etc/hadoop
+$ vi slaves
+hadoop-datanode-1
+hadoop-datanode-2
+Format Name Node on Hadoop Master only
+
+# su - hadoop
+$hadoop namenode -format
+Step 10: Configure Hadoop on datanode server Only
+
+On each datanodes, you may want to specify each node data directory, data nodes can have multiple data directories dfs.data.dir
+
+On each datanode, edit hdfs-site.xml, change dfs.data.dir value accordingly
+
+# vi hdfs-site.xml
+# Add the following inside the configuration tag
+<property>
+	<name>dfs.data.dir</name>
+	<value>/opt/hadoop/dfs/name/data</value>
+	<final>true</final>
+</property>
+Step 11: Start Hadoop Services
+
+Use the following command to start all hadoop services on hadoop namenode and datanodes
+
+$ start-dfs.sh
+Step 12. Test Hadoop cluster(Multiple Nodes) Setup
+
+On namenode, make the HDFS directories required using following commands.
+
+$ hdfs dfs -mkdir /user
+$ hdfs dfs -mkdir /user/hadoop
+Now copy all files from local file system /home/hadoop/etc/hadoop/hadoop-env.sh to hadoop distributed file system using below command
+
+$ hdfs dfs -put /home/hadoop/hadoop-2.7.3.tar /user/hadoop
+Now browse hadoop distributed file system by opening below url in browser.
+
+http://<hadoopnode>:50070/explorer.html#/user/hadoop/
+Now copy logs directory for hadoop distributed file system to local file system.
+
+$ hdfs dfs -get /user/hadoop/hadoop-2.7.3.tar /home/test
+Step 13: Check Hadoop cluster status
+
+hdfs dfsadmin -report 
+Ref:
+
+http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/ClusterSetup.html
