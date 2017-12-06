@@ -1,0 +1,7 @@
+
+https://stackoverflow.com/questions/43662591/wget-using-timeout-and-tries-together
+
+wget --timeout=1 --waitretry=0 --tries=5 --retry-connrefused http://www-eu.apache.org/dist/zookeeper/zookeeper-3.4.11/zookeeper-3.4.11.tar.gz
+
+route add default gw 192.168.174.2 
+
