@@ -1,0 +1,32 @@
+https://www.edureka.co/blog/how-to-set-up-hadoop-cluster-with-hdfs-high-availability/
+
+==========================Short note ======================================
+Start the Journalnode in all the three nodes.
+hadoop-daemon.sh start journalnode
+Format the Active namenode.
+HDFS namenode -format
+Start the Namenode daemon in Active namenode.
+hadoop-daemon.sh start namenode
+Copy the HDFS Meta data from active name node to standby namenode.
+HDFS namenode -bootstrapStandby #run this on namenode2
+Start the namenode daemon in Standby namenode machine.
+hadoop-daemon.sh start namenode
+Now start the Zookeeper service in all the three nodes.
+zkServer.sh start (Run this command in all the nodes)
+Start the Data node daemon in Data node machine.
+hadoop-daemon.sh start datanode
+
+Start the Zookeeper fail over controller in Active name node and standby name node.
+Format the zookeeper fail over controller in Active namenode.
+HDFS zkfc –formatZK
+Start the ZKFC in Active namenode.
+hadoop-daemon.sh start zkfc
+
+Format the zookeeper fail over controller in Standby namenode.
+hdfs zkfc –formatZK
+Start the ZKFC in Standby namenode.
+hadoop-daemon.sh start zkfc
+
+Now check the status of each Namenode, which node is Active or which node is on Standby by using the below command.
+hdfs haadmin –getServiceState nn1
+
