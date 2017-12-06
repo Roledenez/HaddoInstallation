@@ -30,3 +30,6 @@ hadoop-daemon.sh start zkfc
 Now check the status of each Namenode, which node is Active or which node is on Standby by using the below command.
 hdfs haadmin –getServiceState nn1
 
+In the Active namenode, kill the namenode daemon to change the Standby name node to active namenode.
+Enter jps in Active namenode and kill the daemon.
+sudo kill -9 <namenode process ID>
