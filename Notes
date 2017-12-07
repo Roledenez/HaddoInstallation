@@ -11,6 +11,10 @@ rpm -ivh jdk-8u151-linux-x64.rpm
 java -version
 
 
+Hadoop installation
+http://fibrevillage.com/storage/617-hadoop-2-7-cluster-installation-and-configuration-on-rhel7-centos7
+
+
 generating SSH key
 ssh-keygen -t rsa -P ''
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
