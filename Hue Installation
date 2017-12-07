@@ -1,0 +1,16 @@
+yum update
+yum install python
+yum install python27-devel
+https://stackoverflow.com/questions/31815821/started-hue-server-cli-says-8000-config-says-8888-in-reality-nothing
+You seem to start the dev server, the command should look like
+
+./build/env/bin/hue runserver 0.0.0.0:8000
+if you want it to be accessible from another host (and probably need a nohup ... &).
+
+Note that
+
+./build/env/bin/hue runcpserver
+is the correct command for starting the production server.
+
+You can also check with hue.ini is picked-up later by looking at the /dump_config page when you can access it.
+
