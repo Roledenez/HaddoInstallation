@@ -1,0 +1,50 @@
+
+
+1) Extract folder
+
+2)go to /apache-hive-0.13.1-bin/conf and make a copy of hive-default.xml.template , it looks like hive-default.xml (copy).template.
+
+3) Rename hive-default.xml (copy).template to hive-site.xml.
+
+4) Make a copy of hive-env.sh.template to hive-env.sh.
+
+add in hive-env.sh
+
+export HADOOP_HEAPSIZE=1024
+# Set HADOOP_HOME to point to a specific hadoop install directory
+export HADOOP_HOME=/home/user17/BigData/hadoop
+
+#hive 
+export HIVE_HOME=/home/user17/BigData/hive
+# Hive Configuration Directory can be controlled by:
+export HIVE_CONF_DIR=$HIVE_HOME/conf
+5) export hadoop and hive path in .bashrc file
+
+export HADOOP_HOME=/home/user17/BigData/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin
+
+export HIVE_HOME=/home/user17/BigData/hive
+export PATH=$PATH:$HIVE_HOME/bin
+start your hadoop by
+
+start-all.sh
+enjoy with your hive.Give the hadoop and hive path in export command according to your system.let me know if not work.
+
+================================
+Change the hive-site.xml with below properties
+
+<name>hive.exec.scratchdir</name>
+<value>/tmp/hive</value>
+
+ <name>hive.exec.local.scratchdir</name>
+ <value>/tmp/hive</value>
+
+<name>hive.downloaded.resources.dir</name>
+<value>/tmp/hive/${hive.session.id}_resources</value>
+
+<name>hive.scratch.dir.permission</name>
+<value>733</value>
+
+===================================
+Hue
+http://cloudera.github.io/hue/docs-3.5.0/manual.html
