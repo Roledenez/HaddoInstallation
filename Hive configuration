@@ -56,3 +56,32 @@ $HIVE_HOME/bin/hive --service hiveserver2 &
  hive --service hiveserver2 --hiveconf hive.server2.thrift.port=10001 --hiveconf hive.root.logger=INFO,console
  
  
+ ==============================================
+ ============================================
+ It looks like HttpFs is not High Availability aware yet. This could be due to the missing configurations required for the Clients to connect with the current Active Namenode.
+
+Ensure the fs.defaultFS property in core-site.xml is configured with the correct nameservice ID.
+
+If you have the below in hdfs-site.xml
+
+<property>
+  <name>dfs.nameservices</name>
+  <value>mycluster</value>
+</property>
+then in core-site.xml, it should be
+
+<property>
+  <name>fs.defaultFS</name>
+  <value>hdfs://mycluster</value>
+</property>
+Also configure the name of the Java class which will be used by the DFS Client to determine which NameNode is the currently Active and is serving client requests.
+
+Add this property to hdfs-site.xml
+
+<property>
+  <name>dfs.client.failover.proxy.provider.mycluster</name>            
+  <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+</property>
+Restart the Namenodes and HttpFs after adding the properties in all nodes.
+ 
+ 
