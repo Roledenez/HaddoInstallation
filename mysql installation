@@ -1,0 +1,17 @@
+
+
+
+https://www.youtube.com/watch?v=Kneb93gSoRg
+
+
+================================
+
+Open & Edit /etc/my.cnf
+Add skip-grant-tables under [mysqld]
+Restart Mysql
+You should be able to login to mysql now using the below command mysql -u root -p
+Run mysql> flush privileges;
+Set new password by ALTER USER 'root'@'localhost' IDENTIFIED BY 'NewPassword';
+Go back to /etc/my.cnf and remove/comment skip-grant-tables
+Restart Mysql
+Now you will be able to login with the new password mysql -u root -p
