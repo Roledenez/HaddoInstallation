@@ -48,3 +48,11 @@ Change the hive-site.xml with below properties
 ===================================
 Hue
 http://cloudera.github.io/hue/docs-3.5.0/manual.html
+
+
+start hive as a service
+$HIVE_HOME/bin/hive --service hiveserver2 &
+
+ hive --service hiveserver2 --hiveconf hive.server2.thrift.port=10001 --hiveconf hive.root.logger=INFO,console
+ 
+ 
