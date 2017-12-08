@@ -15,3 +15,11 @@ Set new password by ALTER USER 'root'@'localhost' IDENTIFIED BY 'NewPassword';
 Go back to /etc/my.cnf and remove/comment skip-grant-tables
 Restart Mysql
 Now you will be able to login with the new password mysql -u root -p
+
+
+==========================
+Here is what I do to remove the validate password plugin:
+
+Login to the mysql server as root mysql -h localhost -u root -p
+Run the following sql command: uninstall plugin validate_password;
+
